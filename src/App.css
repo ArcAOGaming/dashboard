@@ -1,10 +1,53 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #ffffff;
+  position: relative;
 }
 
-.read-the-docs {
-  color: #888;
+.app-content {
+  flex: 1;
+  min-height: 100vh;
+  margin-left: min(250px, 80vw);
+  transition: margin-left 0.3s ease;
+  width: calc(100% - min(250px, 80vw));
+  overflow-x: hidden;
+}
+
+.app-content.sidebar-collapsed {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* Ensure content is centered and has proper spacing */
+.content-wrapper {
+  max-width: min(1200px, 90vw);
+  margin: 0 auto;
+  padding: clamp(16px, 3vw, 40px);
+}
+
+/* Ensure text remains readable */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+/* Ensure buttons and interactive elements are easily clickable */
+button, 
+a {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure proper spacing between sections */
+section {
+  margin-bottom: clamp(24px, 4vw, 48px);
 }

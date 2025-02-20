@@ -1,44 +1,35 @@
-import reactLogo from '/react.svg'
-import viteLogo from '/vite.svg'
-import arioLogo from '/ario_black.png'
-import arcaoLogo from '/arcao.png'
-import './App.css'
-import { Counter } from './components/Counter'
-import { LogoLink } from './components/LogoLink'
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import './App.css';
+import { Sidebar } from './components/shared/Sidebar';
+import { RuneRealm, RuneRealmHome, Stats } from './pages/runerealm';
+import { Randao } from './pages/randao';
+import { EternalPass } from './pages/runerealm/subpages/stats/subpages/eternal-pass';
 
 function App() {
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
   return (
-    <>
-      <div>
-        <LogoLink
-          href="https://vitejs.dev"
-          src={viteLogo}
-          alt="Vite logo"
-        />
-        <LogoLink
-          href="https://react.dev"
-          src={reactLogo}
-          alt="React logo"
-          className="logo react"
-        />
-        <LogoLink
-          href="https://ar.io"
-          src={arioLogo}
-          alt="AR.IO logo"
-        />
-        <LogoLink
-          href="https://discord.gg/arc-ao"
-          src={arcaoLogo}
-          alt="ArcAO logo"
-        />
+    <Router>
+      <div className="app-container">
+        <Sidebar onToggle={setIsSidebarCollapsed} />
+        <div className={`app-content ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/runerealm" replace />} />
+            
+            <Route path="/runerealm" element={<RuneRealm />}>
+              <Route index element={<RuneRealmHome />} />
+              <Route path="stats" element={<Stats />}>
+                <Route path="eternal-pass" element={<EternalPass />} />
+              </Route>
+            </Route>
+            
+            <Route path="/randao" element={<Randao />} />
+          </Routes>
+        </div>
       </div>
-      <h1>Vite + React + AR.IO + ArcAO</h1>
-      <Counter />
-      <p className="read-the-docs">
-        Click on the Vite, React, AR.IO and ArcAO logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;

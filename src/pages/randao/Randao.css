@@ -1,0 +1,35 @@
+.randao-page {
+  padding: clamp(16px, 3vw, 40px);
+}
+
+.randao-content {
+  max-width: min(1200px, 90vw);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.randao-title {
+  font-size: clamp(24px, 3vw, 32px);
+  margin-bottom: clamp(16px, 2vw, 24px);
+  font-weight: bold;
+}
+
+.randao-section {
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  padding: clamp(16px, 2vw, 24px);
+  margin-bottom: clamp(16px, 2vw, 24px);
+  width: 100%;
+}
+
+.randao-text {
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.6;
+}
+
+.randao-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  width: 100%;
+}
