@@ -15,7 +15,42 @@
   padding: clamp(16px, 2vw, 24px);
 }
 
-.eternal-pass-text {
-  font-size: clamp(14px, 1.5vw, 16px);
-  line-height: 1.6;
+.stats-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stats-select {
+  padding: 8px 12px;
+  border: 1px solid #1a1a1a;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+  min-width: 150px;
+}
+
+.stats-refresh-button {
+  padding: 8px 16px;
+  background-color: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.stats-refresh-button:hover {
+  background-color: #333333;
+}
+
+.stats-refresh-button:disabled {
+  background-color: #999999;
+  cursor: not-allowed;
+}
+
+.stats-plot {
+  width: 100%;
+  margin-top: 16px;
 }
