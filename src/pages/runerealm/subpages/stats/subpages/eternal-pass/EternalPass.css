@@ -1,33 +1,36 @@
 .eternal-pass-container {
+  padding: 20px;
   width: 100%;
-  margin-bottom: clamp(24px, 4vw, 48px);
 }
 
 .eternal-pass-title {
-  font-size: clamp(20px, 2.5vw, 28px);
-  margin-bottom: clamp(12px, 1.5vw, 20px);
-  font-weight: bold;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.eternal-pass-subtitle {
+  margin: 0;
+  color: #1a1a1a;
 }
 
 .eternal-pass-content {
-  background-color: #ffffff;
-  border: 1px solid #000000;
-  padding: clamp(16px, 2vw, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .stats-controls {
   display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .stats-select {
-  padding: 8px 12px;
-  border: 1px solid #1a1a1a;
+  padding: 8px;
+  border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;
-  font-size: 14px;
-  min-width: 150px;
+  min-width: 120px;
 }
 
 .stats-refresh-button {
@@ -37,20 +40,223 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
-}
-
-.stats-refresh-button:hover {
-  background-color: #333333;
 }
 
 .stats-refresh-button:disabled {
-  background-color: #999999;
+  background-color: #ccc;
   cursor: not-allowed;
 }
 
 .stats-plot {
   width: 100%;
-  margin-top: 16px;
+  margin-bottom: 20px;
+}
+
+.table-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  user-select: none;
+}
+
+.collapse-icon {
+  margin-right: 8px;
+  transition: transform 0.2s ease;
+}
+
+.collapse-icon.expanded {
+  transform: rotate(90deg);
+}
+
+.table-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-out;
+}
+
+.table-content.expanded {
+  max-height: 90vh;
+  overflow: visible;
+}
+
+.table-container {
+  position: relative;
+  overflow: auto;
+  height: min(calc(90vh - 60px), 500px);
+  /* Use whichever is smaller */
+  border-top: 1px solid #e0e0e0;
+}
+
+.loading-message,
+.no-data-message {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f8f8;
+}
+
+.raw-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.raw-data-table thead {
+  position: sticky;
+  top: 0;
+  background-color: #f8f8f8;
+  z-index: 1;
+}
+
+.raw-data-table th {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #e0e0e0;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.raw-data-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333;
+}
+
+.raw-data-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Optimize table for horizontal space */
+.raw-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed;
+}
+
+/* Adjust column widths based on content */
+.raw-data-table th,
+.raw-data-table td {
+  padding: 8px 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Specific column widths */
+.raw-data-table th:nth-child(1),
+.raw-data-table td:nth-child(1) {
+  width: 80px;
+  /* ID */
+}
+
+.raw-data-table th:nth-child(2),
+.raw-data-table td:nth-child(2) {
+  width: 150px;
+  /* Date/Recipient */
+}
+
+.raw-data-table th:nth-child(3),
+.raw-data-table td:nth-child(3) {
+  width: 100px;
+  /* Amount/Quantity */
+}
+
+.raw-data-table th:nth-child(4),
+.raw-data-table td:nth-child(4) {
+  width: 120px;
+  /* Source/Sender */
+}
+
+.raw-data-table th:nth-child(5),
+.raw-data-table td:nth-child(5) {
+  width: 150px;
+  /* From Process */
+}
+
+.raw-data-table th:nth-child(6),
+.raw-data-table td:nth-child(6) {
+  width: 180px;
+  /* Ingested At */
+}
+
+/* Show ellipsis for overflowing text */
+.raw-data-table td {
+  position: relative;
+}
+
+.raw-data-table td:hover {
+  overflow: visible;
+  white-space: normal;
+  word-break: break-all;
+  z-index: 1;
+  background-color: #f5f5f5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .raw-data-table {
+    font-size: 12px;
+  }
+
+  .raw-data-table th,
+  .raw-data-table td {
+    padding: 6px 8px;
+  }
+}
+
+/* Custom scrollbar for better visibility */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Ensure table headers stay aligned with content when scrolling horizontally */
+.raw-data-table th,
+.raw-data-table td {
+  min-width: 120px;
+  /* Minimum width for columns */
+}
+
+/* Specific column widths to minimize horizontal scrolling */
+.raw-data-table th:nth-child(1),
+.raw-data-table td:nth-child(1) {
+  min-width: 80px;
+  /* ID column */
+}
+
+.raw-data-table th:nth-child(2),
+.raw-data-table td:nth-child(2) {
+  min-width: 150px;
+  /* Date/Recipient column */
+}
+
+.raw-data-table th:nth-child(3),
+.raw-data-table td:nth-child(3) {
+  min-width: 100px;
+  /* Amount/Quantity column */
 }

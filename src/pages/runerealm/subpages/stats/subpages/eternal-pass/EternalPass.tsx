@@ -7,6 +7,7 @@ import './EternalPass.css';
 const PAYMENT_METHODS = [
   { name: 'Trunk', id: TOKENS.TRUNK },
   { name: 'NAB', id: TOKENS.NUMBER_ALWAYS_BIGGER },
+  { name: 'wAR', id: TOKENS.WRAPPED_ARWEAVE },
 ] as const;
 
 type PaymentMethodId = typeof PAYMENT_METHODS[number]['id'];
@@ -21,17 +22,25 @@ interface AggregatedCreditNotice {
 export const EternalPass: React.FC = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodId>(PAYMENT_METHODS[0].id);
   const [creditNotices, setCreditNotices] = useState<AggregatedCreditNotice[]>([]);
+  const [rawCreditNotices, setRawCreditNotices] = useState<CreditNotice[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [lastQueryTime, setLastQueryTime] = useState<Record<string, number>>({});
+  const [aggregatedExpanded, setAggregatedExpanded] = useState(false);
+  const [rawExpanded, setRawExpanded] = useState(false);
 
   const fetchCreditNotices = useCallback(async (paymentMethodId: string, forceRefresh = false) => {
     const currentTime = Date.now();
+
+    // Check if we have cached data and it's not a forced refresh
     if (!forceRefresh && lastQueryTime[paymentMethodId] &&
       currentTime - lastQueryTime[paymentMethodId] < 24 * 60 * 60 * 1000) {
-      return; // Use cached data if less than 24 hours old
+      // Use cached data
+      return;
     }
 
     setIsLoading(true);
+    setCreditNotices([]); // Clear only if we're actually fetching
+    setRawCreditNotices([]);
     try {
       const service = new CreditNoticeService();
       let notices: CreditNotice[] = [];
@@ -42,14 +51,18 @@ export const EternalPass: React.FC = () => {
       );
 
       // Sort by timestamp and calculate cumulative amount
-      const sortedNotices = notices.sort((a, b) => a.ingestedAt - b.ingestedAt);
+      const sortedNotices = notices.sort((a, b) => a.blockTimeStamp - b.blockTimeStamp);
       let runningTotal = 0;
 
+      // Store raw notices
+      setRawCreditNotices(sortedNotices);
+
+      // Create aggregated notices for the plot
       const formattedNotices = sortedNotices.map(notice => {
         const amount = parseFloat(notice.quantity);
         runningTotal += amount;
         return {
-          timestamp: notice.ingestedAt,
+          timestamp: notice.blockTimeStamp,
           amount,
           cumulativeAmount: runningTotal,
           source: notice.fromProcess
@@ -86,11 +99,11 @@ export const EternalPass: React.FC = () => {
         symbol: 'diamond'
       }
     }];
-  }, [creditNotices, selectedPaymentMethod]);
+  }, [creditNotices]);
 
   const plotLayout: Partial<Layout> = {
     title: {
-      text: `${selectedPaymentMethod === TOKENS.TRUNK ? 'Trunk' : 'NAB'} Token Deposits Over Time`,
+      text: `${PAYMENT_METHODS.find(m => m.id === selectedPaymentMethod)?.name} Token Deposits Over Time`,
       font: {
         family: 'Arial, sans-serif',
         size: 24,
@@ -117,7 +130,7 @@ export const EternalPass: React.FC = () => {
     },
     yaxis: {
       title: {
-        text: `Total ${selectedPaymentMethod === TOKENS.TRUNK ? 'Trunk' : 'NAB'} Tokens Deposited`,
+        text: `Total ${PAYMENT_METHODS.find(m => m.id === selectedPaymentMethod)?.name} Tokens Deposited`,
         font: {
           size: 18,
           color: '#1a1a1a'
@@ -147,6 +160,8 @@ export const EternalPass: React.FC = () => {
     autosize: true
   };
 
+  const selectedPaymentMethodName = PAYMENT_METHODS.find(m => m.id === selectedPaymentMethod)?.name;
+
   return (
     <div className="eternal-pass-container">
       <h2 className="eternal-pass-title">Eternal Pass Purchases</h2>
@@ -175,9 +190,113 @@ export const EternalPass: React.FC = () => {
         <div className="stats-plot">
           <Plot
             data={plotData}
-            layout={plotLayout}
-            style={{ width: '100%', height: '600px' }}
+            layout={{
+              ...plotLayout,
+              height: window.innerWidth < 768 ? 400 : 600,
+              xaxis: {
+                ...plotLayout.xaxis,
+                tickangle: window.innerWidth < 768 ? 90 : 45,
+              },
+              margin: {
+                l: window.innerWidth < 768 ? 50 : 120,
+                r: window.innerWidth < 768 ? 20 : 30,
+                t: 50,
+                b: window.innerWidth < 768 ? 120 : 100,
+              }
+            }}
+            style={{ width: '100%', height: '100%' }}
+            useResizeHandler={true}
           />
+        </div>
+
+        <div className="table-section">
+          <div
+            className="table-header"
+            onClick={() => setAggregatedExpanded(!aggregatedExpanded)}
+          >
+            <div className={`collapse-icon ${aggregatedExpanded ? 'expanded' : ''}`}>
+              ▶
+            </div>
+            <h3 className="eternal-pass-subtitle">Aggregated Data</h3>
+          </div>
+          <div className={`table-content ${aggregatedExpanded ? 'expanded' : ''}`}>
+            <div className="table-container">
+              {isLoading ? (
+                <div className="loading-message">Loading aggregated data...</div>
+              ) : creditNotices.length === 0 ? (
+                <div className="no-data-message">No data available for {selectedPaymentMethodName}</div>
+              ) : (
+                <table className="raw-data-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Amount</th>
+                      <th>Cumulative Amount</th>
+                      <th>Source</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {creditNotices.map((notice, index) => (
+                      <tr key={index}>
+                        <td>
+                          {new Date(notice.timestamp > 1e12 ? notice.timestamp : notice.timestamp * 1000).toLocaleString()}
+                        </td>
+                        <td>{notice.amount.toFixed(2)}</td>
+                        <td>{notice.cumulativeAmount.toFixed(2)}</td>
+                        <td>{notice.source}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="table-section">
+          <div
+            className="table-header"
+            onClick={() => setRawExpanded(!rawExpanded)}
+          >
+            <div className={`collapse-icon ${rawExpanded ? 'expanded' : ''}`}>
+              ▶
+            </div>
+            <h3 className="eternal-pass-subtitle">Raw Credit Notices</h3>
+          </div>
+          <div className={`table-content ${rawExpanded ? 'expanded' : ''}`}>
+            <div className="table-container">
+              {isLoading ? (
+                <div className="loading-message">Loading raw credit notices...</div>
+              ) : rawCreditNotices.length === 0 ? (
+                <div className="no-data-message">No data available for {selectedPaymentMethodName}</div>
+              ) : (
+                <table className="raw-data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Recipient</th>
+                      <th>Quantity</th>
+                      <th>Sender</th>
+                      <th>From Process</th>
+                      <th>Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rawCreditNotices.map((notice) => (
+                      <tr key={notice.id}>
+                        <td>{notice.id}</td>
+                        <td>{notice.recipient}</td>
+                        <td>{notice.quantity}</td>
+                        <td>{notice.sender}</td>
+                        <td>{notice.fromProcess}</td>
+                        <td>{new Date(notice.blockTimeStamp > 1e12 ? notice.blockTimeStamp : notice.blockTimeStamp * 1000).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
