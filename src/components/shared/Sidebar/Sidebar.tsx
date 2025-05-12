@@ -80,6 +80,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
                 Randao
               </NavLink>
             </li>
+            <li>
+              <NavLink 
+                to="/permaweb-index" 
+                className={({ isActive }) => 
+                  `sidebar-link ${isActive ? 'active' : ''}`
+                }
+                onClick={handleLinkClick}
+              >
+                Permaweb Index
+              </NavLink>
+            </li>
           </ul>
         </nav>
       </div>

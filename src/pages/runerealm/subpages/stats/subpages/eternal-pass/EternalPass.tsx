@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { CreditNoticeService, type CreditNotice, TOKENS, processIds } from 'ao-process-clients';
+import { CreditNoticeService, type CreditNotice,  PROCESS_IDS } from 'ao-process-clients';
 import type { Data, Layout } from 'plotly.js';
 import Plot from 'react-plotly.js';
 import './EternalPass.css';
 
 const PAYMENT_METHODS = [
-  { name: 'Trunk', id: TOKENS.TRUNK },
-  { name: 'NAB', id: TOKENS.NUMBER_ALWAYS_BIGGER },
-  { name: 'wAR', id: TOKENS.WRAPPED_ARWEAVE },
+  { name: 'Trunk', id: PROCESS_IDS.COMMUNITY_TOKENS.TRUNK },
+  { name: 'NAB', id: PROCESS_IDS.COMMUNITY_TOKENS.NUMBER_ALWAYS_BIGGER },
+  { name: 'wAR', id: PROCESS_IDS.DEFI.WRAPPED_ARWEAVE },
 ] as const;
 
 type PaymentMethodId = typeof PAYMENT_METHODS[number]['id'];
@@ -42,11 +42,11 @@ export const EternalPass: React.FC = () => {
     setCreditNotices([]); // Clear only if we're actually fetching
     setRawCreditNotices([]);
     try {
-      const service = new CreditNoticeService();
+      const service = CreditNoticeService.autoConfiguration()
       let notices: CreditNotice[] = [];
 
       notices = await service.getCreditNoticesFromProcess(
-        processIds.RUNE_REALM_PAYMENTS_PROCESS_ID,
+        PROCESS_IDS.RUNEREALM.PAYMENTS,
         paymentMethodId
       );
 

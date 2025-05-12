@@ -5,6 +5,7 @@ import { Sidebar } from './components/shared/Sidebar';
 import { RuneRealm, RuneRealmHome, Stats } from './pages/runerealm';
 import { Randao } from './pages/randao';
 import { EternalPass } from './pages/runerealm/subpages/stats/subpages/eternal-pass';
+import { PermawebIndex } from './pages/permaweb-index';
 
 function App() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -25,6 +26,7 @@ function App() {
             </Route>
             
             <Route path="/randao" element={<Randao />} />
+            <Route path="/permaweb-index" element={<PermawebIndex />} />
           </Routes>
         </div>
       </div>

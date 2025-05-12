@@ -1,0 +1,38 @@
+.chart-section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+  margin-top: 1rem;
+}
+
+.process-selector {
+  margin: 1rem 0;
+}
+
+.process-selector label {
+  margin-right: 1rem;
+  font-weight: 500;
+}
+
+.process-selector select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  min-width: 200px;
+}
+
+h1 {
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+}
+
+h2 {
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
