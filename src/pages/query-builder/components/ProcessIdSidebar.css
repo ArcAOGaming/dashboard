@@ -1,0 +1,172 @@
+.process-id-sidebar {
+  position: fixed;
+  left: calc(50% + 420px);
+  top: 20px;
+  width: 280px;
+  max-height: calc(100vh - 40px);
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  overflow-y: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 0.9em;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+.process-id-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.process-id-sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.process-id-sidebar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.process-id-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@media (max-width: 1400px) {
+  .process-id-sidebar {
+    left: calc(50% + 320px);
+    width: 240px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .process-id-sidebar {
+    position: static;
+    width: 100%;
+    max-height: 300px;
+    margin-top: 20px;
+  }
+}
+
+.process-id-section {
+  margin-bottom: 15px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #333;
+  margin-bottom: 8px;
+  padding: 4px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1em;
+}
+
+.section-header .toggle-icon {
+  font-size: 1.2em;
+  transition: transform 0.2s ease;
+}
+
+.section-header .toggle-icon.collapsed {
+  transform: rotate(-90deg);
+}
+
+.section-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.section-content.collapsed {
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+.section-content {
+  max-height: 300px;
+  margin-bottom: 10px;
+  opacity: 1;
+  overflow-y: auto;
+}
+
+.section-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.section-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.section-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.section-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.process-id-item {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85em;
+}
+
+.process-id-item .process-id-name {
+  color: #2c3e50;
+  margin-bottom: 4px;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.process-id-item .process-id-name span {
+  color: #6c757d;
+  font-weight: normal;
+}
+
+.process-id-item:hover {
+  background: #f0f0f0;
+  transform: translateX(-2px);
+}
+
+.process-id-value {
+  font-family: monospace;
+  color: #666;
+  font-size: 0.85em;
+  word-break: break-all;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.copy-success {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  background: #28a745;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  animation: fadeOut 2s forwards;
+  z-index: 1000;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}

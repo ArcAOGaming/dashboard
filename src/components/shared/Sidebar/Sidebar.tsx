@@ -91,6 +91,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
                 Permaweb Index
               </NavLink>
             </li>
+            <li>
+              <NavLink 
+                to="/query-builder" 
+                className={({ isActive }) => 
+                  `sidebar-link ${isActive ? 'active' : ''}`
+                }
+                onClick={handleLinkClick}
+              >
+                Query Builder
+              </NavLink>
+            </li>
           </ul>
         </nav>
       </div>

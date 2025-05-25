@@ -6,6 +6,7 @@ import { RuneRealm, RuneRealmHome, Stats } from './pages/runerealm';
 import { Randao } from './pages/randao';
 import { EternalPass } from './pages/runerealm/subpages/stats/subpages/eternal-pass';
 import { PermawebIndex } from './pages/permaweb-index';
+import { QueryBuilder } from './pages/query-builder';
 
 function App() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -27,6 +28,7 @@ function App() {
             
             <Route path="/randao" element={<Randao />} />
             <Route path="/permaweb-index" element={<PermawebIndex />} />
+            <Route path="/query-builder" element={<QueryBuilder />} />
           </Routes>
         </div>
       </div>
